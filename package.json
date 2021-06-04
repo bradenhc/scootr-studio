@@ -1,0 +1,47 @@
+{
+  "name": "scootr-studio",
+  "productName": "scootr-studio",
+  "version": "0.1.0",
+  "description": "Unifying the design, development, and deployment of serverless applications",
+  "main": ".webpack/main",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "eslint --ext .ts ."
+  },
+  "keywords": [],
+  "author": {
+    "name": "Braden Hitchcock",
+    "email": "developer.hitchcock@gmail.com",
+    "url": "https://hitchcock.codes"
+  },
+  "license": "Apache-2.0",
+  "config": {
+    "forge": "./forge.config.js"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.57",
+    "@electron-forge/maker-deb": "^6.0.0-beta.57",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.57",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.57",
+    "@electron-forge/maker-zip": "^6.0.0-beta.57",
+    "@electron-forge/plugin-webpack": "^6.0.0-beta.57",
+    "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "css-loader": "^5.2.6",
+    "electron": "13.1.0",
+    "eslint": "^7.27.0",
+    "eslint-plugin-import": "^2.23.4",
+    "fork-ts-checker-webpack-plugin": "^6.2.10",
+    "node-loader": "^2.0.0",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^9.2.2",
+    "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
+  }
+}
