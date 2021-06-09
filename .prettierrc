@@ -1,4 +1,7 @@
 {
-    "rangeStart": 15,
-    "tabWidth": 4
+    "rangeStart": 1694,
+    "printWidth": 120,
+    "tabWidth": 4,
+    "singleQuote": true,
+    "trailingComma": "none"
 }
