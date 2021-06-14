@@ -12,21 +12,17 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-html, body {
-    width: 100%;
-    height: 100%;
-    padding: 0px;
-    margin: 0px;
+export enum ApplicationEvent {
+    UPDATE_NAME = 'scootrio.studio.application.update-name',
+    UPDATE_PROVIDER = 'scootrio.studio.application.update-provider',
+    UPDATE_REGION = 'scootrio.studio.application.update-region',
+    QUEUE_DEPLOYMENT = 'scootrio.studio.application.queue-deployment',
+    QUEUE_DEPLOYMENT_RESULT = 'scootrio.studio.application.queue-deployment-result',
+    DEPLOYMENT_PROGRESS = 'scootrio.studio.application.deployment-progress',
+    DEPLOYMENT_RESULT = 'scootrio.studio.application.deployment-result',
+    SAVE = 'scootrio.studio.application.save',
+    LOAD = 'scootrio.studio.application.load',
+    SELECT = 'scootrio.studio.application.select'
 }
 
-body {
-    background-color: #ffffff;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    padding: 0px;
-    margin: 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    overflow: hidden;
-}
+export default ApplicationEvent;

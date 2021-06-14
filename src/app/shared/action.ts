@@ -12,21 +12,18 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-html, body {
-    width: 100%;
-    height: 100%;
-    padding: 0px;
-    margin: 0px;
+import type { ApplicationEvent } from 'edaam/application/events';
+
+export interface IAction {
+    type: ApplicationEvent | string;
+    error: boolean;
+    payload: any;
 }
 
-body {
-    background-color: #ffffff;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    padding: 0px;
-    margin: 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    overflow: hidden;
+export default function action(type: string | any, payload: any | null = null, error: boolean = false): IAction {
+    return {
+        type,
+        error,
+        payload
+    };
 }

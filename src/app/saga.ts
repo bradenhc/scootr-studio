@@ -12,21 +12,18 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-html, body {
-    width: 100%;
-    height: 100%;
-    padding: 0px;
-    margin: 0px;
+import { all } from 'redux-saga/effects';
+
+import applicationSaga from 'edaam/application/operations';
+// import handlerSaga from 'edaam/handler/operations';
+// import storageSaga from 'edaam/storage/operations';
+
+function* rootSaga() {
+    yield all([
+        applicationSaga()
+        //handlerSaga(),
+        //storageSaga()
+    ]);
 }
 
-body {
-    background-color: #ffffff;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    padding: 0px;
-    margin: 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    overflow: hidden;
-}
+export default rootSaga;

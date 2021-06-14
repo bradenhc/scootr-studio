@@ -12,21 +12,44 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-html, body {
-    width: 100%;
-    height: 100%;
-    padding: 0px;
-    margin: 0px;
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import createSagaMiddleware from 'redux-saga';
+
+// TODO: isolate so only in dev
+import logger from 'redux-logger';
+
+// import reduceStatus from 'status/reducers';
+import reduceApplications from 'edaam/application/reducers';
+// import reduceEvents from 'edaam/event/reducers';
+// import reduceSelected from 'edaam/selected/reducers';
+// import reduceHandlers from 'edaam/handler/reducers';
+// import reduceStorage from 'edaam/storage/reducers';
+// import reduceReferences from 'edaam/reference/reducers';
+// import reduceTriggers from 'edaam/trigger/reducers';
+
+import rootSaga from './saga';
+
+import type { IApplicationStateCollection } from 'edaam/application/reducers';
+
+export interface IState {
+    applications: IApplicationStateCollection;
+    selected: any;
 }
 
-body {
-    background-color: #ffffff;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    padding: 0px;
-    margin: 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    overflow: hidden;
-}
+const reduce = combineReducers({
+    //   status: reduceStatus,
+    applications: reduceApplications,
+    //   handlers: reduceHandlers,
+    //   storage: reduceStorage,
+    //   events: reduceEvents,
+    //   references: reduceReferences,
+    //   triggers: reduceTriggers,
+    //   selected: reduceSelected,
+    deployed: () => ({})
+});
+
+const sagaMiddleware = createSagaMiddleware();
+
+export const store = createStore(reduce, applyMiddleware(sagaMiddleware, logger));
+
+sagaMiddleware.run(rootSaga);

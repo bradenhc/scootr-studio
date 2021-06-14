@@ -11,7 +11,12 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "paths": {
-      "*": ["node_modules/*"]
+      "app/*": ["src/app/*"],
+      "shared/*": ["src/app/shared/*"],
+      "layouts/*": ["src/app/layouts/*"],
+      "status/*": ["src/app/status/*"],
+      "edaam/*": ["src/app/edaam/*"],
+      "components/*": ["src/app/components/*"]
     }
   },
   "include": [

@@ -12,21 +12,48 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-html, body {
-    width: 100%;
-    height: 100%;
-    padding: 0px;
-    margin: 0px;
-}
+import events from './events';
 
-body {
-    background-color: #ffffff;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    padding: 0px;
-    margin: 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-    overflow: hidden;
-}
+import action from 'shared/action';
+
+export default {
+    updateName: function (id: string, name: string) {
+        return action(events.UPDATE_NAME, { id, name });
+    },
+
+    updateProvider: function (id: string, provider: string) {
+        return action(events.UPDATE_PROVIDER, { id, provider });
+    },
+
+    updateRegion: function (id: string, region: string) {
+        return action(events.UPDATE_REGION, { id, region });
+    },
+
+    queueDeployment: function (id: string, pkg: object) {
+        return action(events.QUEUE_DEPLOYMENT, { id, pkg });
+    },
+
+    queueDeploymentResponse: function (id: string, result: object, error: boolean) {
+        return action(events.QUEUE_DEPLOYMENT_RESULT, { id, result }, error);
+    },
+
+    deploymentProgress: function (id: string, message: string) {
+        return action(events.DEPLOYMENT_PROGRESS, { id, message });
+    },
+
+    deploymentResult: function (id: string, message: string, error: boolean) {
+        return action(events.DEPLOYMENT_RESULT, { id, message }, error);
+    },
+
+    save: function (id: string, contents: object) {
+        return action(events.SAVE, { id, contents });
+    },
+
+    load: function (id: string) {
+        return action(events.LOAD, id);
+    },
+
+    select: function (id: string) {
+        return action(events.SELECT, id);
+    }
+};
