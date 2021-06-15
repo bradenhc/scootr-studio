@@ -12,46 +12,28 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga';
+import action from 'shared/action';
 
-// TODO: isolate so only in dev
-import logger from 'redux-logger';
+import events from './events';
 
-// import reduceStatus from 'status/reducers';
-import reduceApplications from 'edaam/application/reducers';
-import reduceEvents from 'edaam/event/reducers';
-// import reduceSelected from 'edaam/selected/reducers';
-// import reduceHandlers from 'edaam/handler/reducers';
-// import reduceStorage from 'edaam/storage/reducers';
-// import reduceReferences from 'edaam/reference/reducers';
-// import reduceTriggers from 'edaam/trigger/reducers';
+export default {
+    select: function (id: string) {
+        return action(events.SELECT, id);
+    },
 
-import rootSaga from './saga';
+    create: function (type: string, options: any) {
+        return action(events.CREATE, { type, options });
+    },
 
-import type { IApplicationStateCollection } from 'edaam/application/reducers';
-import type { EventStateCollection } from 'edaam/event/reducers';
+    update: function (id: string, property: string, value: any) {
+        return action(events.UPDATE, { id, property, value });
+    },
 
-export interface IState {
-    applications: IApplicationStateCollection;
-    events: EventStateCollection;
-    selected: any;
-}
+    delete: function (id: string) {
+        return action(events.DELETE, id);
+    },
 
-const reduce = combineReducers({
-    //   status: reduceStatus,
-    applications: reduceApplications,
-    //   handlers: reduceHandlers,
-    //   storage: reduceStorage,
-    events: reduceEvents,
-    //   references: reduceReferences,
-    //   triggers: reduceTriggers,
-    //   selected: reduceSelected,
-    deployed: () => ({})
-});
-
-const sagaMiddleware = createSagaMiddleware();
-
-export const store = createStore(reduce, applyMiddleware(sagaMiddleware, logger));
-
-sagaMiddleware.run(rootSaga);
+    updatePosition: function (id: string, x: number, y: number) {
+        return action(events.UPDATE_POSITION, { id, x, y });
+    }
+};

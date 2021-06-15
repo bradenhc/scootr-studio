@@ -12,46 +12,20 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga';
+import type { IState } from 'app/state';
 
-// TODO: isolate so only in dev
-import logger from 'redux-logger';
+export default {
+    getIsSelected: function (id: string) {
+        return function (state: IState) {
+            return state.selected.resource.id === id;
+        };
+    },
 
-// import reduceStatus from 'status/reducers';
-import reduceApplications from 'edaam/application/reducers';
-import reduceEvents from 'edaam/event/reducers';
-// import reduceSelected from 'edaam/selected/reducers';
-// import reduceHandlers from 'edaam/handler/reducers';
-// import reduceStorage from 'edaam/storage/reducers';
-// import reduceReferences from 'edaam/reference/reducers';
-// import reduceTriggers from 'edaam/trigger/reducers';
-
-import rootSaga from './saga';
-
-import type { IApplicationStateCollection } from 'edaam/application/reducers';
-import type { EventStateCollection } from 'edaam/event/reducers';
-
-export interface IState {
-    applications: IApplicationStateCollection;
-    events: EventStateCollection;
-    selected: any;
-}
-
-const reduce = combineReducers({
-    //   status: reduceStatus,
-    applications: reduceApplications,
-    //   handlers: reduceHandlers,
-    //   storage: reduceStorage,
-    events: reduceEvents,
-    //   references: reduceReferences,
-    //   triggers: reduceTriggers,
-    //   selected: reduceSelected,
-    deployed: () => ({})
-});
-
-const sagaMiddleware = createSagaMiddleware();
-
-export const store = createStore(reduce, applyMiddleware(sagaMiddleware, logger));
-
-sagaMiddleware.run(rootSaga);
+    getIsValid: function (id: string) {
+        return function (state: IState) {
+            const event = state.events[id];
+            return Object.keys(event._meta.errors).length == 0;
+        };
+    }
+};
+  

@@ -16,7 +16,7 @@ import producer from 'immer';
 
 import events from './events';
 
-import type { IAction } from 'shared/action';
+import type { Action } from 'shared/action';
 
 export interface IApplicationState {
     id: string;
@@ -44,7 +44,7 @@ const initialState: IApplicationStateCollection = {
     }
 };
 
-const reduce = producer((draft, action: IAction) => {
+const reduce = producer((draft, action: Action) => {
     switch (action.type) {
         case events.UPDATE_NAME:
             draft[action.payload.id].name = action.payload.name;

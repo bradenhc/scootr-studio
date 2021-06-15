@@ -14,13 +14,13 @@
 **************************************************** END COPYRIGHT ****************************************************/
 import type { ApplicationEvent } from 'edaam/application/events';
 
-export interface IAction {
+export type Action = {
     type: ApplicationEvent | string;
     error: boolean;
     payload: any;
 }
 
-export default function action(type: string | any, payload: any | null = null, error: boolean = false): IAction {
+export default function action(type: string | any, payload: any | null = null, error: boolean = false): Action {
     return {
         type,
         error,
