@@ -12,22 +12,22 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import type { IState } from 'app/state';
+import type { AppState } from 'app/state';
 
 export default {
-    getAll: function (state: IState) {
+    getAll: function (state: AppState) {
         return state.applications[state.selected.application];
     },
 
-    getId: function (state: IState) {
+    getId: function (state: AppState) {
         return state.selected.application;
     },
 
-    getName: function (state: IState) {
+    getName: function (state: AppState) {
         return state.applications[state.selected.application].name;
     },
 
-    getIsNameValid: function (state: IState) {
+    getIsNameValid: function (state: AppState) {
         const app = state.applications[state.selected.application];
         if (app.name === '') {
             return { valid: false, message: 'Application name is required' };
@@ -38,11 +38,11 @@ export default {
         return { valid: true };
     },
 
-    getProvider: function (state: IState) {
+    getProvider: function (state: AppState) {
         return state.applications[state.selected.application].provider;
     },
 
-    getIsProviderValid: function (state: IState) {
+    getIsProviderValid: function (state: AppState) {
         const app = state.applications[state.selected.application];
         if (app.provider === null || app.provider === '') {
             return { valid: false, message: 'Provider cannot be empty' };
@@ -50,11 +50,11 @@ export default {
         return { valid: true };
     },
 
-    getRegion: function (state: IState) {
+    getRegion: function (state: AppState) {
         return state.applications[state.selected.application].region;
     },
 
-    getIsRegionValid: function (state: IState) {
+    getIsRegionValid: function (state: AppState) {
         const app = state.applications[state.selected.application];
         if (app.region === null || app.region === '') {
             return { valid: false, message: 'Region cannot be empty' };
@@ -62,15 +62,15 @@ export default {
         return { valid: true };
     },
 
-    getIsDeployed: function (state: IState) {
+    getIsDeployed: function (state: AppState) {
         return state.applications[state.selected.application].isDeployed;
     },
 
-    getIsDeploying: function (state: IState) {
+    getIsDeploying: function (state: AppState) {
         return state.applications[state.selected.application].isDeploying;
     },
 
-    getHasUnsavedChanges: function (state: IState) {
+    getHasUnsavedChanges: function (state: AppState) {
         return state.applications[state.selected.application].hasUnsavedChanges;
     }
 };

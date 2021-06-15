@@ -29,11 +29,11 @@ import reduceEvents from 'edaam/event/reducers';
 
 import rootSaga from './saga';
 
-import type { IApplicationStateCollection } from 'edaam/application/reducers';
+import type { ApplicationStateCollection } from 'edaam/application/reducers';
 import type { EventStateCollection } from 'edaam/event/reducers';
 
-export interface IState {
-    applications: IApplicationStateCollection;
+export type AppState = {
+    applications: ApplicationStateCollection;
     events: EventStateCollection;
     selected: any;
 }

@@ -12,17 +12,17 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import type { IState } from 'app/state';
+import type { AppState } from 'app/state';
 
 export default {
     getIsSelected: function (id: string) {
-        return function (state: IState) {
+        return function (state: AppState) {
             return state.selected.resource.id === id;
         };
     },
 
     getIsValid: function (id: string) {
-        return function (state: IState) {
+        return function (state: AppState) {
             const event = state.events[id];
             return Object.keys(event._meta.errors).length == 0;
         };

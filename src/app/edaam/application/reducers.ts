@@ -18,7 +18,7 @@ import events from './events';
 
 import type { Action } from 'shared/action';
 
-export interface IApplicationState {
+export type ApplicationState = {
     id: string;
     name: string | null;
     provider: string | null;
@@ -28,11 +28,11 @@ export interface IApplicationState {
     hasUnsavedChanges: boolean;
 }
 
-export interface IApplicationStateCollection {
-    [id: string]: IApplicationState;
+export type ApplicationStateCollection = {
+    [id: string]: ApplicationState;
 }
 
-const initialState: IApplicationStateCollection = {
+const initialState: ApplicationStateCollection = {
     'edaam:application/default': {
         id: 'edaam:application/default',
         name: null,
