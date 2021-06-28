@@ -16,6 +16,10 @@ import action from 'shared/action';
 
 import events from './events';
 
+import type { ComponentPosition } from 'edaam/metadata/creator';
+
+import type { EventComponent } from './creator';
+
 export default {
     select: function (id: string) {
         return action(events.SELECT, id);
@@ -23,6 +27,10 @@ export default {
 
     create: function (type: string, options: any) {
         return action(events.CREATE, { type, options });
+    },
+
+    createSuccess: function(event: EventComponent) {
+        return action(events.CREATE_SUCCESS, { event })
     },
 
     update: function (id: string, property: string, value: any) {
@@ -33,7 +41,7 @@ export default {
         return action(events.DELETE, id);
     },
 
-    updatePosition: function (id: string, x: number, y: number) {
-        return action(events.UPDATE_POSITION, { id, x, y });
+    updatePosition: function (id: string, position: ComponentPosition) {
+        return action(events.UPDATE_POSITION, { id, position });
     }
 };

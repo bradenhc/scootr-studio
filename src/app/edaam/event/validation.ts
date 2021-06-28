@@ -14,9 +14,7 @@
 **************************************************** END COPYRIGHT ****************************************************/
 import Joi from '@hapi/joi';
 
-type Validator = (value: any) => string | null;
-
-type ValidatorSet = { [name: string]: Validator };
+import type { ValidatorSet } from 'edaam/validation';
 
 export const captions = {
     // Shared

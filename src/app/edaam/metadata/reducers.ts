@@ -14,26 +14,44 @@
 **************************************************** END COPYRIGHT ****************************************************/
 import produce from 'immer';
 
-import events from './events';
+import { validators as eventValidators } from 'edaam/event/validation';
+import eventEvents from 'edaam/event/events';
+import { createEventMetadata } from 'edaam/event/meta';
 
+import type { WritableDraft } from 'immer/dist/internal';
+import type { ValidatorSet } from 'edaam/validation';
 import type { Action } from 'shared/action';
+import type { ComponentMetadataCollection } from './creator';
 
-import type { EventComponentCollection } from './creator';
+const initialState: ComponentMetadataCollection = {};
 
-const initialState: EventComponentCollection = {};
+function validateWith(validators: ValidatorSet, draft: WritableDraft<ComponentMetadataCollection>, action: Action) {
+    const error = validators[action.payload.property](action.payload.value);
+    if (error) {
+        draft[action.payload.id].errors[action.payload.property] = error;
+    } else {
+        delete draft[action.payload.id].errors[action.payload.property];
+    }
+}
 
 const reduce = produce((draft, action: Action) => {
     switch (action.type) {
-        case events.CREATE_SUCCESS:
-            draft[action.payload.event.id] = action.payload.event;
+        case eventEvents.CREATE_SUCCESS:
+            const newMeta = createEventMetadata(action.payload.event.props.protection, { x: 0, y: 0 });
+            draft[action.payload.event.id] = newMeta;
             break;
 
-        case events.UPDATE:
-            draft[action.payload.id].props[action.payload.property] = action.payload.value;
+        case eventEvents.UPDATE:
+            validateWith(eventValidators, draft, action);
             break;
 
-        case events.DELETE:
+        case eventEvents.DELETE:
             delete draft[action.payload];
+            break;
+
+        case eventEvents.UPDATE_POSITION:
+            const event = draft[action.payload.id];
+            event.position = action.payload.position;
             break;
     }
 }, initialState);

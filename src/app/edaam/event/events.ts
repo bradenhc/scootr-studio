@@ -15,6 +15,7 @@
 export enum EventEvent {
     SELECT = 'scootrio.studio.edaam.event.select',
     CREATE = 'scootrio.studio.edaam.event.create',
+    CREATE_SUCCESS = 'scootrio.studio.edaam.event.create-success',
     UPDATE = 'scootrio.studio.edaam.event.update',
     DELETE = 'scootrio.studio.edaam.event.delete',
     UPDATE_POSITION = 'scootrio.studio.edaam.event.update-position'

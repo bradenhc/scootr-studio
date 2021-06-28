@@ -12,30 +12,26 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import produce from 'immer';
+import { put, takeEvery, all } from 'redux-saga/effects';
 
+import actions from './actions';
 import events from './events';
+import { createEvent } from './creator';
 
 import type { Action } from 'shared/action';
 
-import type { EventComponentCollection } from './creator';
+function* onCreateEvent(action: Action) {
+    const event = createEvent(action.payload.type);
+    yield put(actions.createSuccess(event));
+    yield put(actions.updatePosition(event.id, action.payload.position));
+}
 
-const initialState: EventComponentCollection = {};
+function* createEventSaga() {
+    yield takeEvery(events.CREATE, onCreateEvent);
+}
 
-const reduce = produce((draft, action: Action) => {
-    switch (action.type) {
-        case events.CREATE_SUCCESS:
-            draft[action.payload.event.id] = action.payload.event;
-            break;
+function* sagas() {
+    yield all([createEventSaga]);
+}
 
-        case events.UPDATE:
-            draft[action.payload.id].props[action.payload.property] = action.payload.value;
-            break;
-
-        case events.DELETE:
-            delete draft[action.payload];
-            break;
-    }
-}, initialState);
-
-export default reduce;
+export default sagas;

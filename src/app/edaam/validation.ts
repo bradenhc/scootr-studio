@@ -12,30 +12,6 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import produce from 'immer';
+export type Validator = (value: any) => string | null;
 
-import events from './events';
-
-import type { Action } from 'shared/action';
-
-import type { EventComponentCollection } from './creator';
-
-const initialState: EventComponentCollection = {};
-
-const reduce = produce((draft, action: Action) => {
-    switch (action.type) {
-        case events.CREATE_SUCCESS:
-            draft[action.payload.event.id] = action.payload.event;
-            break;
-
-        case events.UPDATE:
-            draft[action.payload.id].props[action.payload.property] = action.payload.value;
-            break;
-
-        case events.DELETE:
-            delete draft[action.payload];
-            break;
-    }
-}, initialState);
-
-export default reduce;
+export type ValidatorSet = { [name: string]: Validator };

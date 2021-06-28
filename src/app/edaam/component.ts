@@ -12,30 +12,47 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import produce from 'immer';
+import uuid from 'uuid';
 
-import events from './events';
+/**
+ * Describes the general shape of an EDAAM component.
+ *
+ * All EDAAM components  share a similar top-level shape. This shape is captured by this type. Additional data
+ * belonging to a specific type of component is stored in the `props` field.
+ */
+export type Component<PropType> = {
+    id: string;
+    type: ComponentType;
+    name: string;
+    specialization?: string;
+    props: PropType;
+};
 
-import type { Action } from 'shared/action';
+/**
+ * Describes the complete set of EDAAM component types recognized by the system.
+ */
+export enum ComponentType {
+    EVENT = 'event',
+    HANDLER = 'handler',
+    STORAGE = 'storage',
+    REFERENCE = 'reference',
+    TRIGGER = 'trigger'
+}
 
-import type { EventComponentCollection } from './creator';
+/**
+ * Create a plain JavaScript object in the shape of an EDAAM component.
+ *
+ * @param type The type of component
+ * @param props The properties containing additional information about the component
+ *
+ * @returns An initialized EDAAM component.
+ */
+export function createComponent<PropType>(type: ComponentType, props: PropType): Component<PropType> {
+    return {
+        id: 'edaam:' + type + '/' + uuid.v4(),
+        type: type,
+        name: '',
+        props: props
+    };
+}
 
-const initialState: EventComponentCollection = {};
-
-const reduce = produce((draft, action: Action) => {
-    switch (action.type) {
-        case events.CREATE_SUCCESS:
-            draft[action.payload.event.id] = action.payload.event;
-            break;
-
-        case events.UPDATE:
-            draft[action.payload.id].props[action.payload.property] = action.payload.value;
-            break;
-
-        case events.DELETE:
-            delete draft[action.payload];
-            break;
-    }
-}, initialState);
-
-export default reduce;
