@@ -18,7 +18,9 @@ import events from './events';
 
 import type { Action } from 'shared/action';
 
-import type { EventComponentCollection } from './creator';
+import type { EventComponent, HttpEventProps, PubsubEventProps } from './creator';
+
+export type EventComponentCollection = { [id: string]: EventComponent };
 
 const initialState: EventComponentCollection = {};
 
@@ -28,8 +30,24 @@ const reduce = produce((draft, action: Action) => {
             draft[action.payload.event.id] = action.payload.event;
             break;
 
-        case events.UPDATE:
-            draft[action.payload.id].props[action.payload.property] = action.payload.value;
+        case events.UPDATE_PROTECTION:
+            draft[action.payload.id].props.protection = action.payload.value;
+            break;
+
+        case events.UPDATE_HTTP_PATH:
+            (draft[action.payload.id].props as HttpEventProps).path = action.payload.value;
+            break;
+
+        case events.UPDATE_HTTP_METHOD:
+            (draft[action.payload.id].props as HttpEventProps).method = action.payload.value;
+            break;
+
+        case events.UPDATE_PUBSUB_BROKER:
+            (draft[action.payload.id].props as PubsubEventProps).broker = action.payload.value;
+            break;
+
+        case events.UPDATE_PUBSUB_TOPIC:
+            (draft[action.payload.id].props as PubsubEventProps).topic = action.payload.value;
             break;
 
         case events.DELETE:

@@ -19,13 +19,10 @@ import type { Component } from 'edaam/component';
 
 export type EventComponent = Component<EventProps>;
 
-export type EventComponentCollection = { [id: string]: EventComponent };
-
 export type EventProps = PublicEventProps | PrivateEventProps;
 
 export type CommonEventProps = {
     protection: EventProtection;
-    [name: string]: any;
 };
 
 export type PublicEventProps = CommonEventProps | HttpEventProps;

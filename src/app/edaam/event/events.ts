@@ -13,11 +13,20 @@
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
 export enum EventEvent {
+    // Lifecycle
     SELECT = 'scootrio.studio.edaam.event.select',
     CREATE = 'scootrio.studio.edaam.event.create',
     CREATE_SUCCESS = 'scootrio.studio.edaam.event.create-success',
-    UPDATE = 'scootrio.studio.edaam.event.update',
     DELETE = 'scootrio.studio.edaam.event.delete',
+
+    // Properties
+    UPDATE_PROTECTION = 'scootrio.studio.edaam.event.update-protection',
+    UPDATE_HTTP_PATH = 'scootrio.studio.edaam.event.update-http-path',
+    UPDATE_HTTP_METHOD = 'scootrio.studio.edaam.event.update-http-method',
+    UPDATE_PUBSUB_BROKER = 'scootrio.studio.edaam.event.update-pubsub-broker',
+    UPDATE_PUBSUB_TOPIC = 'scootrio.studio.edaam.event.update-pubsub-topic',
+
+    // Metadata
     UPDATE_POSITION = 'scootrio.studio.edaam.event.update-position'
 }
 

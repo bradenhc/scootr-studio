@@ -33,8 +33,24 @@ export default {
         return action(events.CREATE_SUCCESS, { event })
     },
 
-    update: function (id: string, property: string, value: any) {
-        return action(events.UPDATE, { id, property, value });
+    updateProtection: function (id: string, value: any) {
+        return action(events.UPDATE_PROTECTION, { id, value });
+    },
+
+    updateHttpPath: function (id: string, value: any) {
+        return action(events.UPDATE_HTTP_PATH, { id, value });
+    },
+
+    updateHttpMethod: function (id: string, value: any) {
+        return action(events.UPDATE_HTTP_METHOD, { id, value });
+    },
+
+    updatePubSubBroker: function (id: string, value: any) {
+        return action(events.UPDATE_PUBSUB_BROKER, { id, value });
+    },
+
+    updatePubSubTopic: function (id: string, value: any) {
+        return action(events.UPDATE_PUBSUB_TOPIC, { id, value });
     },
 
     delete: function (id: string) {
