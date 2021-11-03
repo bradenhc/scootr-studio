@@ -12,48 +12,29 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga';
+enum HandlerEvent {
+    // Lifecycle
+    SELECT = 'scootrio.studio.edaam.handler.select',
+    CREATE = 'scootrio.studio.edaam.handler.create',
+    CREATE_SUCCESS = 'scootrio.studio.edaam.handler.create-success',
+    CREATE_FAILURE = 'scootrio.studio.edaam.handler.create-failure',
+    DELETE = 'scootrio.studio.edaam.handler.delete',
 
-// TODO: isolate so only in dev
-import logger from 'redux-logger';
+    // Properties
+    UPDATE_CODE = 'scootrio.studio.edaam.handler.update-code',
+    UPDATE_RUNTIME = 'scootrio.studio.edaam.handler.update-runtime',
+    ADD_ENVIRONMENT_VARIABLE = 'scootrio.studio.edaam.handler.env-var-add',
+    UPDATE_ENVIRONMENT_VARIABLE = 'scootrio.studio.edaam.handler.env-var-update',
+    DELETE_ENVIRONMENT_VARIABLE = 'scootrio.studio.edaam.handler.env-var-delete',
 
-// import reduceStatus from 'status/reducers';
-import reduceApplications from 'edaam/application/reducers';
-import reduceEvents from 'edaam/event/reducers';
-// import reduceSelected from 'edaam/selected/reducers';
-import reduceHandlers from 'edaam/handler/reducers';
-// import reduceStorage from 'edaam/storage/reducers';
-// import reduceReferences from 'edaam/reference/reducers';
-// import reduceTriggers from 'edaam/trigger/reducers';
+    // Metadata
+    UPDATE_POSITION = 'scootrio.studio.edaam.handler.update-position',
 
-import rootSaga from './saga';
+    // Operations
+    FETCH_LOGS = 'scootrio.studio.edaam.handler.fetch-logs',
+    FETCH_LOGS_RESULT = 'scootrio.studio.edaam.handler.fetch-logs-result',
+    FETCH_LOGS_UPDATE = 'scootrio.studio.edaam.handler.fetch-logs-update',
+    CANCEL_FETCH_LOGS = 'scootrio.studio.edaam.handler.cancel-fetch-logs'
+}
 
-import type { ApplicationStateCollection } from 'edaam/application/reducers';
-import type { EventComponentCollection } from 'edaam/event/reducers';
-import type { HandlerComponentCollection } from 'edaam/handler/reducers';
-
-export type AppState = {
-    applications: ApplicationStateCollection;
-    events: EventComponentCollection;
-    handlers: HandlerComponentCollection;
-    selected: any;
-};
-
-const reduce = combineReducers({
-    //   status: reduceStatus,
-    applications: reduceApplications,
-    handlers: reduceHandlers,
-    //   storage: reduceStorage,
-    events: reduceEvents,
-    //   references: reduceReferences,
-    //   triggers: reduceTriggers,
-    //   selected: reduceSelected,
-    deployed: () => ({})
-});
-
-const sagaMiddleware = createSagaMiddleware();
-
-export const store = createStore(reduce, applyMiddleware(sagaMiddleware, logger));
-
-sagaMiddleware.run(rootSaga);
+export default HandlerEvent;

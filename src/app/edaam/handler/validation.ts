@@ -12,48 +12,35 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga';
+import Joi from '@hapi/joi';
 
-// TODO: isolate so only in dev
-import logger from 'redux-logger';
+import type { ValidatorSet } from 'edaam/validation';
 
-// import reduceStatus from 'status/reducers';
-import reduceApplications from 'edaam/application/reducers';
-import reduceEvents from 'edaam/event/reducers';
-// import reduceSelected from 'edaam/selected/reducers';
-import reduceHandlers from 'edaam/handler/reducers';
-// import reduceStorage from 'edaam/storage/reducers';
-// import reduceReferences from 'edaam/reference/reducers';
-// import reduceTriggers from 'edaam/trigger/reducers';
-
-import rootSaga from './saga';
-
-import type { ApplicationStateCollection } from 'edaam/application/reducers';
-import type { EventComponentCollection } from 'edaam/event/reducers';
-import type { HandlerComponentCollection } from 'edaam/handler/reducers';
-
-export type AppState = {
-    applications: ApplicationStateCollection;
-    events: EventComponentCollection;
-    handlers: HandlerComponentCollection;
-    selected: any;
+export const captions = {
+    NameMissing: 'Handler name is required',
+    NameInvalid: 'Handler name must only contain alphanumeric characters',
+    RuntimeMissing: 'Runtime is required',
+    CodeMissing: 'Handler code missing'
 };
 
-const reduce = combineReducers({
-    //   status: reduceStatus,
-    applications: reduceApplications,
-    handlers: reduceHandlers,
-    //   storage: reduceStorage,
-    events: reduceEvents,
-    //   references: reduceReferences,
-    //   triggers: reduceTriggers,
-    //   selected: reduceSelected,
-    deployed: () => ({})
-});
+const nameSchema = Joi.string().alphanum().error(new Error(captions.NameInvalid));
 
-const sagaMiddleware = createSagaMiddleware();
-
-export const store = createStore(reduce, applyMiddleware(sagaMiddleware, logger));
-
-sagaMiddleware.run(rootSaga);
+export const validators: ValidatorSet = {
+    name: (val) => {
+        if (val === '' || val === null) return captions.NameMissing;
+        const { error } = nameSchema.validate(val);
+        if (error) return error.message;
+        return null;
+    },
+    runtime: (val) => {
+        if (val === '' || val === null) return captions.RuntimeMissing;
+        return null;
+    },
+    code: (val) => {
+        if (val === '' || val === null) return captions.CodeMissing;
+        return null;
+    },
+    environment: (val) => {
+        return null;
+    }
+};

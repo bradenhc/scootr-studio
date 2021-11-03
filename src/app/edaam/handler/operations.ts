@@ -12,48 +12,27 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga';
+import { all, call, put, take, takeEvery } from 'redux-saga/effects';
 
-// TODO: isolate so only in dev
-import logger from 'redux-logger';
+import actions from './actions';
+import events from './events';
+import { createHandler } from './creator';
 
-// import reduceStatus from 'status/reducers';
-import reduceApplications from 'edaam/application/reducers';
-import reduceEvents from 'edaam/event/reducers';
-// import reduceSelected from 'edaam/selected/reducers';
-import reduceHandlers from 'edaam/handler/reducers';
-// import reduceStorage from 'edaam/storage/reducers';
-// import reduceReferences from 'edaam/reference/reducers';
-// import reduceTriggers from 'edaam/trigger/reducers';
+import type { Effect } from 'redux-saga/effects';
 
-import rootSaga from './saga';
+import type { Action } from 'shared/action';
 
-import type { ApplicationStateCollection } from 'edaam/application/reducers';
-import type { EventComponentCollection } from 'edaam/event/reducers';
-import type { HandlerComponentCollection } from 'edaam/handler/reducers';
+function* create(action: Action): Iterable<Effect> {
+    const newHandler = yield call(createHandler);
+    yield put(actions.createSuccess(newHandler));
+}
 
-export type AppState = {
-    applications: ApplicationStateCollection;
-    events: EventComponentCollection;
-    handlers: HandlerComponentCollection;
-    selected: any;
-};
+function* watchCreate(): Iterable<Effect> {
+    yield takeEvery(events.CREATE, create);
+}
 
-const reduce = combineReducers({
-    //   status: reduceStatus,
-    applications: reduceApplications,
-    handlers: reduceHandlers,
-    //   storage: reduceStorage,
-    events: reduceEvents,
-    //   references: reduceReferences,
-    //   triggers: reduceTriggers,
-    //   selected: reduceSelected,
-    deployed: () => ({})
-});
+function* saga() {
+    yield all([watchCreate(), ]);
+}
 
-const sagaMiddleware = createSagaMiddleware();
-
-export const store = createStore(reduce, applyMiddleware(sagaMiddleware, logger));
-
-sagaMiddleware.run(rootSaga);
+export default saga;

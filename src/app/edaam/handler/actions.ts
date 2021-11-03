@@ -12,48 +12,53 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga';
+import action from 'shared/action';
 
-// TODO: isolate so only in dev
-import logger from 'redux-logger';
+import events from './events';
 
-// import reduceStatus from 'status/reducers';
-import reduceApplications from 'edaam/application/reducers';
-import reduceEvents from 'edaam/event/reducers';
-// import reduceSelected from 'edaam/selected/reducers';
-import reduceHandlers from 'edaam/handler/reducers';
-// import reduceStorage from 'edaam/storage/reducers';
-// import reduceReferences from 'edaam/reference/reducers';
-// import reduceTriggers from 'edaam/trigger/reducers';
+export default {
+    select: function (id: string) {
+        return action(events.SELECT, id);
+    },
 
-import rootSaga from './saga';
+    create: function (options: any) {
+        return action(events.CREATE, options);
+    },
 
-import type { ApplicationStateCollection } from 'edaam/application/reducers';
-import type { EventComponentCollection } from 'edaam/event/reducers';
-import type { HandlerComponentCollection } from 'edaam/handler/reducers';
+    createSuccess: function (newHandler: any) {
+        return action(events.CREATE_SUCCESS, newHandler);
+    },
 
-export type AppState = {
-    applications: ApplicationStateCollection;
-    events: EventComponentCollection;
-    handlers: HandlerComponentCollection;
-    selected: any;
+    createFailure: function (message: string) {
+        return action(events.CREATE_FAILURE, message, true);
+    },
+
+    updateCode: function (id: string, value: string) {
+        return action(events.UPDATE_CODE, { id, value });
+    },
+
+    updateRuntime: function (id: string, value: string) {
+        return action(events.UPDATE_RUNTIME, { id, value });
+    },
+
+    addEnvironmentVariable: function (id: string, key: string, value: string) {
+        return action(events.ADD_ENVIRONMENT_VARIABLE, { id, key, value });
+    },
+
+    updateEnvironmentVariable: function (id: string, key: string, value: any) {
+        return action(events.UPDATE_ENVIRONMENT_VARIABLE, { id, key, value });
+    },
+
+    deleteEnvironmentVariable: function (id: string, key: string) {
+        return action(events.DELETE_ENVIRONMENT_VARIABLE, { id, key });
+    },
+
+    delete: function (id: string) {
+        return action(events.DELETE, id);
+    },
+
+    // Position
+    updatePosition: function (id: string, x: number, y: number) {
+        return action(events.UPDATE_POSITION, { id, x, y });
+    }
 };
-
-const reduce = combineReducers({
-    //   status: reduceStatus,
-    applications: reduceApplications,
-    handlers: reduceHandlers,
-    //   storage: reduceStorage,
-    events: reduceEvents,
-    //   references: reduceReferences,
-    //   triggers: reduceTriggers,
-    //   selected: reduceSelected,
-    deployed: () => ({})
-});
-
-const sagaMiddleware = createSagaMiddleware();
-
-export const store = createStore(reduce, applyMiddleware(sagaMiddleware, logger));
-
-sagaMiddleware.run(rootSaga);

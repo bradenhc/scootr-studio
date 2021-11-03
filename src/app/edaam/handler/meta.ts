@@ -12,48 +12,39 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga';
+import uuid from 'uuid';
 
-// TODO: isolate so only in dev
-import logger from 'redux-logger';
+import { createComponentMetadata } from 'edaam/metadata/creator';
 
-// import reduceStatus from 'status/reducers';
-import reduceApplications from 'edaam/application/reducers';
-import reduceEvents from 'edaam/event/reducers';
-// import reduceSelected from 'edaam/selected/reducers';
-import reduceHandlers from 'edaam/handler/reducers';
-// import reduceStorage from 'edaam/storage/reducers';
-// import reduceReferences from 'edaam/reference/reducers';
-// import reduceTriggers from 'edaam/trigger/reducers';
+import { captions } from './validation';
 
-import rootSaga from './saga';
+import type { ComponentMetadata, ComponentEndpoint, ComponentPosition } from 'edaam/metadata/creator';
 
-import type { ApplicationStateCollection } from 'edaam/application/reducers';
-import type { EventComponentCollection } from 'edaam/event/reducers';
-import type { HandlerComponentCollection } from 'edaam/handler/reducers';
+export function createHandlerMetadata(position: ComponentPosition): ComponentMetadata {
+    return createComponentMetadata(position, {
+        tooltip: 'Handler',
+        endpoints: createHandlerEndpoints(),
+        errors: {
+            name: captions.NameMissing,
+            runtime: captions.RuntimeMissing,
+            code: captions.CodeMissing
+        }
+    });
+}
 
-export type AppState = {
-    applications: ApplicationStateCollection;
-    events: EventComponentCollection;
-    handlers: HandlerComponentCollection;
-    selected: any;
-};
-
-const reduce = combineReducers({
-    //   status: reduceStatus,
-    applications: reduceApplications,
-    handlers: reduceHandlers,
-    //   storage: reduceStorage,
-    events: reduceEvents,
-    //   references: reduceReferences,
-    //   triggers: reduceTriggers,
-    //   selected: reduceSelected,
-    deployed: () => ({})
-});
-
-const sagaMiddleware = createSagaMiddleware();
-
-export const store = createStore(reduce, applyMiddleware(sagaMiddleware, logger));
-
-sagaMiddleware.run(rootSaga);
+function createHandlerEndpoints(): ComponentEndpoint[] {
+    return [
+        {
+            isSource: true,
+            id: uuid.v4(),
+            scopes: ['event-public', 'event-private'],
+            dashed: true
+        },
+        {
+            isTarget: true,
+            id: uuid.v4(),
+            scopes: ['handler'],
+            dashed: true
+        }
+    ];
+}

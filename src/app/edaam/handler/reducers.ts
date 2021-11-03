@@ -12,48 +12,45 @@
 * specific language governing permissions and limitations under the License.                                           *
 *                                                                                                                      *
 **************************************************** END COPYRIGHT ****************************************************/
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga';
+import produce from 'immer';
 
-// TODO: isolate so only in dev
-import logger from 'redux-logger';
+import events from './events';
 
-// import reduceStatus from 'status/reducers';
-import reduceApplications from 'edaam/application/reducers';
-import reduceEvents from 'edaam/event/reducers';
-// import reduceSelected from 'edaam/selected/reducers';
-import reduceHandlers from 'edaam/handler/reducers';
-// import reduceStorage from 'edaam/storage/reducers';
-// import reduceReferences from 'edaam/reference/reducers';
-// import reduceTriggers from 'edaam/trigger/reducers';
+import type { Action } from 'shared/action';
 
-import rootSaga from './saga';
+import type { HandlerComponent } from './creator';
 
-import type { ApplicationStateCollection } from 'edaam/application/reducers';
-import type { EventComponentCollection } from 'edaam/event/reducers';
-import type { HandlerComponentCollection } from 'edaam/handler/reducers';
+export type HandlerComponentCollection = { [id: string]: HandlerComponent };
 
-export type AppState = {
-    applications: ApplicationStateCollection;
-    events: EventComponentCollection;
-    handlers: HandlerComponentCollection;
-    selected: any;
-};
+const initialState: HandlerComponentCollection = {};
 
-const reduce = combineReducers({
-    //   status: reduceStatus,
-    applications: reduceApplications,
-    handlers: reduceHandlers,
-    //   storage: reduceStorage,
-    events: reduceEvents,
-    //   references: reduceReferences,
-    //   triggers: reduceTriggers,
-    //   selected: reduceSelected,
-    deployed: () => ({})
-});
+const reduce = produce((draft, action: Action) => {
+    switch (action.type) {
+        case events.CREATE_SUCCESS:
+            draft[action.payload.event.id] = action.payload.event;
+            break;
 
-const sagaMiddleware = createSagaMiddleware();
+        case events.UPDATE_CODE:
+            draft[action.payload.id].props.code = action.payload.value;
+            break;
 
-export const store = createStore(reduce, applyMiddleware(sagaMiddleware, logger));
+        case events.UPDATE_RUNTIME:
+            draft[action.payload.id].props.runtime = action.payload.value;
+            break;
 
-sagaMiddleware.run(rootSaga);
+        case events.ADD_ENVIRONMENT_VARIABLE:
+        case events.UPDATE_ENVIRONMENT_VARIABLE:
+            draft[action.payload.id].props.environment[action.payload.key] = action.payload.value;
+            break;
+
+        case events.DELETE_ENVIRONMENT_VARIABLE:
+            delete draft[action.payload.id].props.environment[action.payload.key];
+            break;
+
+        case events.DELETE:
+            delete draft[action.payload];
+            break;
+    }
+}, initialState);
+
+export default reduce;
